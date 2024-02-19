@@ -16,9 +16,11 @@
         <version>3.2.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>io.github.max402</groupId>
+
+    <groupId>io.github.max402.release</groupId>
     <artifactId>release</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <name>release</name>
     <description>release</description>
     <properties>
