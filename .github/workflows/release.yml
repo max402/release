@@ -35,7 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
         run: |
-          TAG="$(echo "git describe --abbrev=0")"
+          TAG="$(git describe --abbrev=0)"
           gh release create "$TAG" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${TAG#v}" \
