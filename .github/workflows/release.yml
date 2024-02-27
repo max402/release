@@ -21,9 +21,9 @@ jobs:
           submodules: 'true'
 
       - name: Step 2 - Run release-scripts
-        env:
-          NEXT_VERSION: $(echo "${{ inputs.version }}" | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1) . '-SNAPSHOT'}e')
-        run: ./release-scripts/release.sh ${{ inputs.version }} $NEXT_VERSION
+        run: |
+          NEXT_VERSION = $(echo "${{ inputs.version }}" | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1) . '-SNAPSHOT'}e')
+          ./release-scripts/release.sh ${{ inputs.version }} $NEXT_VERSION
 
       - name: Step 3 - Atomic push
         run: git push --atomic origin master develop --follow-tags # all or nothing
