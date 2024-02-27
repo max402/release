@@ -71,7 +71,7 @@ function build_release_modules {
 # Should set version numbers in your modules
 # Parameter $1 - version as text
 function set_modules_version {
-  echo "Version: $1 - do nothing" >> /dev/null
+  cd ${SCRIPT_PATH}/.. && mvn -B versions:set -DnewVersion=$1
 }
 
 # Builds the commit message used for your release commit
