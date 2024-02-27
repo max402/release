@@ -11,16 +11,42 @@ on:
 
 name: Release
 
+env:
+  NEXT_VERSION: $(echo "${{ inputs.version }}" | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1) . '-SNAPSHOT'}e')
+
 jobs:
   release_workflow:
     runs-on: ubuntu-latest
     steps:
-      - name: gitflow-workflow-action release workflows
-        uses: hoangvvo/gitflow-workflow-action@0.3.7
+      - name: Step 1 - Checkout repository code
+        uses: actions/checkout@v4
         with:
-          develop_branch: "develop"
-          main_branch: "master"
-          merge_back_from_main: true
-          version: ${{ inputs.version }}
+          submodules: 'true'
+
+      - name: Step 2 - Run release-scripts
+        run: ./release-scripts/release.sh ${{ inputs.version }} $NEXT_VERSION
+
+      - name: Step 3 - Atomic push
+        run: git push --atomic origin master develop --follow-tags # all or nothing
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Step 4 - Create release notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: $(echo "git describe --abbrev=0")
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --generate-notes
+
+#      - name: gitflow-workflow-action release workflows
+#        uses: hoangvvo/gitflow-workflow-action@0.3.7
+#        with:
+#          develop_branch: "develop"
+#          main_branch: "master"
+#          merge_back_from_main: true
+#          version: ${{ inputs.version }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
