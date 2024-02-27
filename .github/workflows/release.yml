@@ -25,7 +25,8 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: |
           NEXT_VERSION="$(echo '${{ inputs.version }}' | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1)}e')"
-          echo $NEXT_VERSION
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           ./release-scripts/release.sh -v $VERSION $NEXT_VERSION
 
       - name: Step 3 - Atomic push
