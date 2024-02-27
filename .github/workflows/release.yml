@@ -5,9 +5,6 @@ on:
         type: string
         required: true
         description: "Version to release"
-  pull_request:
-    types:
-      - closed
 
 name: Release
 
@@ -27,6 +24,7 @@ jobs:
           NEXT_VERSION="$(echo '${{ inputs.version }}' | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1)}e')"
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          echo $(git log -5 --oneline)
           ./release-scripts/release.sh -v $VERSION $NEXT_VERSION
 
       - name: Step 3 - Atomic push
