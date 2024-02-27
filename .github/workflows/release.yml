@@ -36,9 +36,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
         run: |
           TAG="$(echo "git describe --abbrev=0")"
-          gh release create "$tag" \
+          gh release create "$TAG" \
               --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --title="${GITHUB_REPOSITORY#*/} ${TAG#v}" \
               --generate-notes
 
 #      - name: gitflow-workflow-action release workflows
