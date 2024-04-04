@@ -17,6 +17,7 @@ jobs:
         with:
           submodules: 'true'
           fetch-depth: 0
+          token: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
 
       - name: Step 2 - Run release-scripts
         env:
