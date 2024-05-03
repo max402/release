@@ -31,14 +31,14 @@ jobs:
 
       - name: Step 3 - Configure Git user
         run: |
-          git config --global user.name "max402"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "Github Action"
+          git config --global user.email "action@users.noreply.github.com"
 
       - name: Step 4 - Make Release
         run: |
           mvn -B -ntp release:prepare -DreleaseVersion=${{ github.event.inputs.version }} -DpushChanges=false
           git push --follow-tags
-          mvn release:perform
+          mvn release:perform -DlocalCheckout=true
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
