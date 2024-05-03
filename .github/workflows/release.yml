@@ -27,9 +27,14 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Step 3 - Make Release
+      - name: Step 3 - Configure Git user
         run: |
-          mvn --batch-mode -ntp release:prepare -DreleaseVersion=${{ github.event.inputs.version }}
+          git config --global user.name "release-action"
+          git config --global user.email "release-action@users.noreply.github.com"
+
+      - name: Step 4 - Make Release
+        run: |
+          mvn -B -ntp release:prepare -DreleaseVersion=${{ github.event.inputs.version }}
           mvn release:perform
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
@@ -40,15 +45,13 @@ jobs:
           GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
 
-      - name: merge release to master
+      - name: Step 5 - Merge release to master
         run: |
-          git config --global user.name "release-action"
-          git config --global user.email "release-action@users.noreply.github.com"
           git checkout master
           git merge develop
           git push
 
-      - name: Step 5 - Create release notes
+      - name: Step 6 - Create release notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
