@@ -38,7 +38,7 @@ jobs:
         run: |
           mvn -B -ntp release:prepare -DreleaseVersion=${{ github.event.inputs.version }} -DpushChanges=false
           git push --follow-tags
-          mvn release:perform -DlocalCheckout=true
+          mvn release:perform -DlocalCheckout=true -Dusername=${{ secrets.SONATYPE_USERNAME }} -Dpassword=${{ secrets.SONATYPE_PASSWORD }}
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
