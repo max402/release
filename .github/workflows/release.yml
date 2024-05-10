@@ -35,23 +35,23 @@ jobs:
 
       - name: Step 4 - Make Release
         run: |
-#         make sure that it's develop, even if workflow started from another branch
+          : # make sure that it's develop, even if workflow started from another branch
           git checkout develop
                
-#         creates 2 commits: first with release versions in pom and tag, second with new snapshot version in poms
+          : # creates 2 commits: first with release versions in pom and tag, second with new snapshot version in poms
           mvn -B -ntp release:prepare -DreleaseVersion=${{ github.event.inputs.version }} -DpushChanges=false
 
-#         create release branch on tagged commit
+          : # create release branch on tagged commit
           git checkout -b $RELEASE_BRANCH `git describe --tag --abbrev=0`
           
-#         merge to master all changes till release  
+          : # merge to master all changes till release  
           git checkout master
           git merge $RELEASE_BRANCH
           
-#         push everything     
+          : # push everything     
           git push --atomic origin $RELEASE_BRANCH master develop --follow-tags # all or nothing
           
-#         deploy to sonatype
+          : # deploy to sonatype
           mvn release:perform -DlocalCheckout=true --settings scripts/settings.xml
 
         env:
