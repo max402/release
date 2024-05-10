@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.max402.release</groupId>
         <artifactId>release</artifactId>
-        <version>0.0.15</version>
+        <version>0.0.16-SNAPSHOT</version>
     </parent>
 
     <artifactId>module3</artifactId>
