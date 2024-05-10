@@ -60,15 +60,27 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-release-plugin</artifactId>-->
+<!--                <version>${maven-release-plugin.version}</version>-->
+<!--                <configuration>-->
+<!--                    <scmCommentPrefix>[ci skip]</scmCommentPrefix>-->
+<!--                    <tagNameFormat>v@{project.version}</tagNameFormat>-->
+<!--                    <remoteTagging>false</remoteTagging>-->
+<!--                    <autoVersionSubmodules>true</autoVersionSubmodules>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.13</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-                    <tagNameFormat>v@{project.version}</tagNameFormat>
-                    <remoteTagging>false</remoteTagging>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
         </plugins>
