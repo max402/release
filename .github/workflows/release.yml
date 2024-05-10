@@ -35,18 +35,18 @@ jobs:
 
       - name: Step 4 - Make Release
         run: |
-          git checkout -b release/${{ github.event.inputs.version }}
+          git checkout -b $RELEASE_BRANCH
           
           mvn -B -ntp release:prepare -DreleaseVersion=${{ github.event.inputs.version }} -DpushChanges=false
           mvn release:perform -DlocalCheckout=true --settings scripts/settings.xml
           
           git checkout master
-          git merge release/${{ github.event.inputs.version }}
+          git merge $RELEASE_BRANCH
           
           git checkout develop
-          git merge release/${{ github.event.inputs.version }}
+          git merge $RELEASE_BRANCH
           
-          git push --atomic origin release/${{ github.event.inputs.version }} master develop --follow-tags # all or nothing
+          git push --atomic origin $RELEASE_BRANCH master develop --follow-tags # all or nothing
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
@@ -55,6 +55,7 @@ jobs:
           GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
           GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
+          RELEASE_BRANCH: release-${{ github.event.inputs.version }}
 
       - name: Step 5 - Create release notes
         env:
