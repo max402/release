@@ -46,6 +46,7 @@ jobs:
           mvn versions:set -ntp -DnewVersion=${{ inputs.version }}
           git add -u
           git status
+          git config --list --global
           git commit -m "Prepare release $VERSION"
           
           git tag -a $TAG
