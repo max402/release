@@ -45,7 +45,7 @@ jobs:
           
           mvn versions:set -ntp -DnewVersion=${{ inputs.version }}
           git add -u
-          git commit -m "Prepare release ${{ inputs.version }}"
+          git commit -m "Prepare release $VERSION"
           
           git tag -a $TAG
           
@@ -72,8 +72,9 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
-          RELEASE_BRANCH: release-${{ github.event.inputs.version }}
-          TAG: v${{ github.event.inputs.version }}
+          VERSION: ${{ inputs.version }}
+          RELEASE_BRANCH: release-${{ inputs.version }}
+          TAG: v${{ inputs.version }}
 
       - name: Step 5 - Deploy to Sonatype
         run: |
