@@ -45,6 +45,7 @@ jobs:
           
           mvn versions:set -ntp -DnewVersion=${{ inputs.version }}
           git add -u
+          git status
           git commit -m "Prepare release $VERSION"
           
           git tag -a $TAG
@@ -65,6 +66,7 @@ jobs:
           :# mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT
           :# NEXT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           git add -u
+          git status
           git commit -m "Start next iteration with $NEXT_VERSION"
           
           : # push everything     
