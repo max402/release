@@ -43,3 +43,5 @@ git commit -m "Start next iteration with $NEXT_VERSION"
 
 # push everything
 git push --atomic origin "$RELEASE_BRANCH" master develop --follow-tags # all or nothing
+
+git checkout master
