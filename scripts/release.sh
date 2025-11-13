@@ -33,9 +33,9 @@ git merge --no-edit "$RELEASE_BRANCH"
 NEXT_VERSION="$(echo "$VERSION" | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1) . "-SNAPSHOT"}e')"
 mvn versions:set -ntp -DnewVersion="$NEXT_VERSION"
 
-:# alternatively:
-:# mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT
-:# NEXT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+# alternatively:
+# mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT
+# NEXT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 git add -u
 git status
