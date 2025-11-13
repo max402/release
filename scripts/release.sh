@@ -27,7 +27,7 @@ git merge --no-edit "$RELEASE_BRANCH"
 
 # merge to develop
 git checkout develop
-git --no-edit "$RELEASE_BRANCH"
+git merge --no-edit "$RELEASE_BRANCH"
 
 # create new snapshot version
 NEXT_VERSION="$(echo "$VERSION" | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1) . "-SNAPSHOT"}e')"
