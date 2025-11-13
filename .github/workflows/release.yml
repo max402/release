@@ -33,58 +33,19 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }} # Value of the GPG private key to import
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }} # env variable for GPG private key passphrase
 
-      - name: Step 3 - Configure Git user
+      - name: Step 3 - Make Release
         run: |
-          git config --global user.name "release plugin"
-          git config --global user.email "release-plugin@users.noreply.github.com"
-
-      - name: Step 4 - Make Release
-        run: |
-          : # create release branch
-          git checkout -b $RELEASE_BRANCH
-          
-          mvn versions:set -ntp -DnewVersion=${{ inputs.version }}
-          git add -u
-          git status
-          git config --list --global
-          git commit -m "Prepare release $VERSION"
-          
-          git tag -a "$TAG" -m "Release $TAG"
-          
-          : # merge to master all changes till release  
-          git checkout master
-          git merge $RELEASE_BRANCH
-          
-          : # merge to develop
-          git checkout develop
-          git merge $RELEASE_BRANCH
-          
-          : # create new snapshot version
-          NEXT_VERSION="$(echo '${{ inputs.version }}' | perl -pe 's{^(([0-9]\.)+)?([0-9]+)$}{$1 . ($3 + 1) . "-SNAPSHOT"}e')"
-          mvn versions:set -ntp -DnewVersion=$NEXT_VERSION
-          
-          :# alternatively:
-          :# mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT
-          :# NEXT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          git add -u
-          git status
-          git commit -m "Start next iteration with $NEXT_VERSION"
-          
-          : # push everything     
-          git push --atomic origin $RELEASE_BRANCH master develop --follow-tags # all or nothing
-
+          chmod +x scripts/release.sh
+          ./scripts/release.sh "${{ inputs.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
-          VERSION: ${{ inputs.version }}
-          RELEASE_BRANCH: release-${{ inputs.version }}
-          TAG: v${{ inputs.version }}
 
-      - name: Step 5 - Deploy to Sonatype
+      - name: Step 4 - Deploy to Sonatype
         run: |
           git checkout master
           mvn clean deploy -ntp -DskipTests -U
 
-      - name: Step 6 - Create release notes
+      - name: Step 5 - Create release notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
