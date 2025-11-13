@@ -49,7 +49,7 @@ jobs:
           git config --list --global
           git commit -m "Prepare release $VERSION"
           
-          git tag -a $TAG
+          git tag -a "$TAG" -m "Release $TAG"
           
           : # merge to master all changes till release  
           git checkout master
