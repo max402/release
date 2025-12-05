@@ -16,14 +16,14 @@ jobs:
 
     steps:
       - name: Checkout repository code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
           token: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
 
       - name: Create and push release commits
         run: |
-          chmod +x scripts/release.sh
+#          chmod +x scripts/release.sh
           ./scripts/release.sh "${{ inputs.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
@@ -36,7 +36,7 @@ jobs:
           java-version: '17'
 
       - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy
+        run: mvn deploy -ntp
         env:
           GITHUB_TOKEN: ${{ github.token }}
 

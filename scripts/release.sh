@@ -9,7 +9,7 @@ git config --global user.name "release plugin"
 git config --global user.email "release-plugin@users.noreply.github.com"
 
 # create release branch
-git checkout -b ""$RELEASE_BRANCH""
+git checkout -b "$RELEASE_BRANCH"
 
 mvn versions:set -ntp -DnewVersion="$VERSION"
 git add -u
