@@ -26,7 +26,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TO_PROTECTED_BRANCH }}
 
-
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -35,7 +34,7 @@ jobs:
           cache: 'maven'
           overwrite-settings: false
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }} # Value of the GPG private key to import
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish to Central and GitHub
         run: mvn clean deploy -P release -s ./scripts/settings.xml -ntp -DskipTests -U
@@ -45,9 +44,6 @@ jobs:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
-
-
 
       - name: Create release notes
         env:
