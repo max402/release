@@ -12,8 +12,8 @@ jobs:
   release_workflow:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write # for create release notes
+      packages: write # for publish artifacts to the GitHub registry
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v6
