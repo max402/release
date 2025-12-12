@@ -12,7 +12,8 @@ jobs:
   release_workflow:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      packages: write
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v6
